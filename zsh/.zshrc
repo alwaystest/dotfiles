@@ -176,3 +176,4 @@ tm() {
 
 # Local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+. /usr/local/etc/profile.d/z.sh
