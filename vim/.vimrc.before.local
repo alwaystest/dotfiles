@@ -1,0 +1,4 @@
+" spf13 options {
+    " Disable views
+       let g:spf13_no_views = 1
+" }
