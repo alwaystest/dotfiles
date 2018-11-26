@@ -2,3 +2,7 @@
     " Disable views
        let g:spf13_no_views = 1
 " }
+if LINUX()
+    "optimize performance for raspberrypi
+    let g:spf13_bundle_groups=['general', 'writing', 'neocomplete',]
+endif
