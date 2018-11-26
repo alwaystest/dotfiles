@@ -13,6 +13,7 @@ then
 fi
 
 # Install homebrew packages
+brew install z
 brew cask install shadowsocksx-ng v2rayx
 
 exit 0
