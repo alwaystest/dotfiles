@@ -9,11 +9,11 @@
 if test ! $(which brew)
 then
   echo "  Installing Homebrew for you."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /tmp/homebrew-install.log
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Install homebrew packages
 brew install z
-brew cask install shadowsocksx-ng v2rayx
+brew cask install v2rayx macpass iterm2 squirrel alfred vim shadowsocksx-ng dropbox google-chrome
 
 exit 0
