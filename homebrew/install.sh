@@ -14,6 +14,6 @@ fi
 
 # Install homebrew packages
 brew install z
-brew cask install v2rayx macpass iterm2 squirrel alfred vim shadowsocksx-ng dropbox google-chrome
+brew cask install v2rayx macpass iterm2 squirrel alfred vim shadowsocksx-ng tmux dropbox google-chrome
 
 exit 0
