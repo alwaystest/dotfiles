@@ -1,7 +1,8 @@
 #!/bin/sh
 
 #Homebrew
-./homebrew/install.sh
+./homebrew/install.sh init
+./homebrew/install.sh basic
 
 #copy configs
 cp idea/.ideavimrc ~/
@@ -17,3 +18,4 @@ cp vim/.vimrc.local ~/
 cp vim/.vimrc.before.local ~/
 git config --global user.email alwaystest@users.noreply.github.com
 git config --global user.name eric
+./homebrew/install.sh extra
