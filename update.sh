@@ -2,25 +2,27 @@
 
 upload()
 {
-    cd idea
-    sh update.sh $1
+    cd $1
+    sh update.sh upload
     cd ..
 }
 
 download()
 {
-    cd idea
-    sh update.sh $1
+    cd $1
+    sh update.sh download
     cd ..
 }
 
 case "$1" in
     'upload')
-        upload $1
+        upload $2
         ;;
     'download')
-        download $1
+        download $2
         ;;
     *)
     echo "Didn't match anything"
+    echo "Usage: update upload idea"
+    echo "Usage: update download idea"
 esac
