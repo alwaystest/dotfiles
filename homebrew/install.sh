@@ -16,7 +16,7 @@ install_brew() {
 
 # Install homebrew packages
 install_basic() {
-    brew install z
+    brew install z rg
     brew upgrade sqlite3
     brew cask install v2rayx iterm2 squirrel alfred vim
 }
