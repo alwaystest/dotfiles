@@ -34,3 +34,4 @@ if OSX()
     nnoremap <leader>m :Marks<CR>
     nnoremap <leader>r :Rg<CR>
 endif
+color gruvbox
