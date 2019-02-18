@@ -22,7 +22,7 @@ install_basic() {
 }
 
 install_extra() {
-    brew cask install shadowsocksx-ng tmux dropbox macpass google-chrome scrcpy visual-studio-code
+    brew cask install shadowsocksx-ng tmux dropbox macpass google-chrome scrcpy visual-studio-code spectacle
 }
 
 case "$1" in
