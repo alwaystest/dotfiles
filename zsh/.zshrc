@@ -54,9 +54,11 @@ ZSH_THEME="robbyrussell"
 
 
 # Note that zsh-syntax-highlighting must be the last plugin sourced.
-plugins=(git autojump sudo adb rsync docker docker-compose osx history-substring-search zsh-syntax-highlighting)
+plugins=(git sudo adb rsync docker docker-compose osx vi-mode history-substring-search tig)
+# autojump
 
 source $ZSH/oh-my-zsh.sh
+. /usr/local/etc/profile.d/z.sh
 
 # User configuration
 
@@ -186,6 +188,14 @@ if command -v rg >/dev/null; then
     export FZF_DEFAULT_COMMAND='rg --files'
 fi
 
+# fzf with z
+unalias z 2> /dev/null
+
+z() {
+  [ $# -gt 0 ] && _z "$*" && return
+  cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+}
+
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
 # `tm` will allow you to select your tmux session via fzf.
 # `tm irc` will attach to the irc session (if it exists), else it will create it.
@@ -200,4 +210,3 @@ tm() {
 
 # Local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
-. /usr/local/etc/profile.d/z.sh
