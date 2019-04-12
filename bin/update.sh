@@ -1,6 +1,6 @@
 #!bin/sh
 
-files=(proxy.sh unproxy.sh)
+files=(proxy.sh unproxy.sh pixel adbw)
 
 upload()
 {

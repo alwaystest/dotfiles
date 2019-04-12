@@ -1,0 +1,6 @@
+#/bin/bash
+
+adbw -d shell sh /data/data/me.piebridge.brevent/brevent.sh
+adbw shell am start -n moe.shizuku.privileged.api/moe.shizuku.manager.MainActivity
+adbw shell sh /sdcard/Android/data/moe.shizuku.privileged.api/files/start.sh
+adbw shell input keyevent 4
