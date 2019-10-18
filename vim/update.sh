@@ -1,6 +1,6 @@
 #!bin/sh
 
-files=(.vimrc.local .vimrc.before.local)
+files=(.vimrc.local .vimrc.before.local .vimrc)
 
 upload()
 {
