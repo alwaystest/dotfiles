@@ -21,6 +21,7 @@
 
 " General {
 
+    set background=dark         " Assume a dark background
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
     set mouse=a                 " Automatically enable mouse usage
@@ -110,7 +111,7 @@
     set splitright                  " Puts new vsplit windows to the right of the current
     set splitbelow                  " Puts new split windows to the bottom of the current
     " Remove trailing whitespaces and ^M chars
-    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql,vim autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql,vim,ruby autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
     "autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
     autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
@@ -167,6 +168,7 @@
     nmap <leader>f7 :set foldlevel=7<CR>
     nmap <leader>f8 :set foldlevel=8<CR>
     nmap <leader>f9 :set foldlevel=9<CR>
+    nmap <space> za
 
     " Most prefer to toggle search highlighting rather than clear the current
     " search results. To clear search highlighting rather than toggle it on
@@ -290,9 +292,69 @@
             endif
         endif
     " }
+
+    " syntastic {
+        set statusline+=%#warningmsg#
+        set statusline+=%{SyntasticStatuslineFlag()}
+        set statusline+=%*
+
+        let g:syntastic_always_populate_loc_list = 1
+        let g:syntastic_auto_loc_list = 1
+        let g:syntastic_check_on_open = 1
+        let g:syntastic_check_on_wq = 0
+    " }
+
+    " deoplete {
+         " Enable deoplete when InsertEnter.
+         let g:deoplete#enable_at_startup = 0
+         autocmd InsertEnter * call deoplete#enable()
+    " }
 " }
 
 " Functions {
+
+    " Initialize directories {
+    function! InitializeDirectories()
+        let parent = $HOME
+        let prefix = 'vim'
+        let dir_list = {
+                    \ 'backup': 'backupdir',
+                    \ 'views': 'viewdir',
+                    \ 'swap': 'directory' }
+
+        if has('persistent_undo')
+            let dir_list['undo'] = 'undodir'
+        endif
+
+        " To specify a different directory in which to place the vimbackup,
+        " vimviews, vimundo, and vimswap files/directories, add the following to
+        " your .vimrc.before.local file:
+        "   let g:spf13_consolidated_directory = <full path to desired directory>
+        "   eg: let g:spf13_consolidated_directory = $HOME . '/.vim/'
+        if exists('g:spf13_consolidated_directory')
+            let common_dir = g:spf13_consolidated_directory . prefix
+        else
+            let common_dir = parent . '/.' . prefix
+        endif
+
+        for [dirname, settingname] in items(dir_list)
+            let directory = common_dir . dirname . '/'
+            if exists("*mkdir")
+                if !isdirectory(directory)
+                    call mkdir(directory)
+                endif
+            endif
+            if !isdirectory(directory)
+                echo "Warning: Unable to create backup directory: " . directory
+                echo "Try: mkdir -p " . directory
+            else
+                let directory = substitute(directory, " ", "\\\\ ", "g")
+                exec "set " . settingname . "=" . directory
+            endif
+        endfor
+    endfunction
+    call InitializeDirectories()
+    "
 
     " Strip whitespace {
     function! StripTrailingWhitespace()

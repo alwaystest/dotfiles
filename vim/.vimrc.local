@@ -20,6 +20,18 @@ Plug 'luochen1990/rainbow'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-surround'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-syntastic/syntastic'
+Plug 'jiangmiao/auto-pairs'
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 " Initialize plugin system
 call plug#end()
@@ -46,4 +58,4 @@ if OSX()
     nnoremap <leader>r :Rg<CR>
 endif
 color gruvbox
-:nmap <F1> <nop>
+:map <F1> <nop>
