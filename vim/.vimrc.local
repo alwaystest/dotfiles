@@ -33,6 +33,8 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
+Plug 'deoplete-plugins/deoplete-jedi'
+
 " Initialize plugin system
 call plug#end()
 
