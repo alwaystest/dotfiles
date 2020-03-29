@@ -20,6 +20,7 @@ install()
 {
     vim +PlugInstall +qall
     pip3 install --user --upgrade pynvim
+    pip3 install --user --upgrade autopep8
 }
 
 case "$1" in

@@ -305,9 +305,13 @@
     " }
 
     " deoplete {
-         " Enable deoplete when InsertEnter.
-         let g:deoplete#enable_at_startup = 0
-         autocmd InsertEnter * call deoplete#enable()
+        " Enable deoplete when InsertEnter.
+        let g:deoplete#enable_at_startup = 0
+        autocmd InsertEnter * call deoplete#enable()
+    " }
+
+    " neoformat {
+        let g:neoformat_enabled_python = ['autopep8']
     " }
 " }
 
