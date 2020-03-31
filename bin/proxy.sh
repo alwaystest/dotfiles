@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
-PROXY=http://127.0.0.1:8001
+case "$1" in
+    'v2ray')
+        PROXY=http://127.0.0.1:8001
+        ;;
+    'clash')
+        PROXY=http://127.0.0.1:7890
+        ;;
+    *)
+esac
+echo $PROXY
 export ALL_PROXY=$PROXY
 if test $(which git)
 then
