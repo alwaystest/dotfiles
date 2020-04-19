@@ -1,16 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 upload()
 {
     cd $1
-    sh update.sh upload
+    bash update.sh upload
     cd ..
 }
 
 download()
 {
     cd $1
-    sh update.sh download
+    bash update.sh download
     cd ..
 }
 

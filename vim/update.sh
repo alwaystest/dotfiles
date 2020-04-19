@@ -1,4 +1,4 @@
-#!bin/sh
+#!bin/bash
 
 files=(.vimrc.local .vimrc.before.local .vimrc)
 
