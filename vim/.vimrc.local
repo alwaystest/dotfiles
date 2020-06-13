@@ -56,11 +56,13 @@ function! s:find_git_root()
 endfunction
 command! ProjectFiles execute 'Files' s:find_git_root()
 
-" fzf
-let g:ctrlp_map = ''
-nnoremap <C-p> :Files<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>m :Marks<CR>
-nnoremap <leader>r :Rg<CR>
+if OSX()
+    " fzf
+    let g:ctrlp_map = ''
+    nnoremap <C-p> :Files<CR>
+    nnoremap <leader>b :Buffers<CR>
+    nnoremap <leader>m :Marks<CR>
+    nnoremap <leader>r :Rg<CR>
+endif
 color gruvbox
 :map <F1> <nop>
