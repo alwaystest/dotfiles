@@ -10,6 +10,8 @@ case "$1" in
     *)
 esac
 echo $PROXY
+export http_proxy=$PROXY
+export https_proxy=$PROXY
 export ALL_PROXY=$PROXY
 if test $(which git)
 then
