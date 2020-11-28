@@ -9,11 +9,8 @@ cp idea/.ideavimrc ~/
 cp tmux/.tmux.conf ~/
 #oh my zsh
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-cp zsh/.zshrc ~/
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-cp vim/.vimrc.local ~/
-cp vim/.vimrc.before.local ~/
+./update download zsh
+./update download vim
 git config --global user.email 7553247+alwaystest@users.noreply.github.com
 git config --global user.name eric
 ./homebrew/install.sh extra

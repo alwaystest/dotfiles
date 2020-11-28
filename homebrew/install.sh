@@ -26,6 +26,10 @@ install_extra() {
     brew cask install shadowsocksx-ng macpass google-chrome scrcpy visual-studio-code spectacle font-firacode-nerd-font-mono
 }
 
+if [ "$(uname)" != "Darwin" ];then
+    exit 0
+fi
+
 case "$1" in
     'basic')
         install_basic

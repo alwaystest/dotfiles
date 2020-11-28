@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/eric/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -58,7 +58,7 @@ plugins=(git sudo adb rsync docker docker-compose osx vi-mode history-substring-
 # autojump
 
 source $ZSH/oh-my-zsh.sh
-. /usr/local/etc/profile.d/z.sh
+[ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
 
 # User configuration
 
@@ -90,7 +90,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias p="ping"
 
-eval "$(pyenv init -)"
+if command -v pyenv >/dev/null; then
+  eval "$(pyenv init -)"
+fi
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
