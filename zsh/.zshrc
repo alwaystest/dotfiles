@@ -55,7 +55,6 @@ ZSH_THEME="robbyrussell"
 
 # Note that zsh-syntax-highlighting must be the last plugin sourced.
 plugins=(git sudo adb rsync docker docker-compose osx vi-mode history-substring-search tig)
-# autojump
 
 source $ZSH/oh-my-zsh.sh
 [ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
@@ -93,7 +92,6 @@ alias p="ping"
 if command -v pyenv >/dev/null; then
   eval "$(pyenv init -)"
 fi
-[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

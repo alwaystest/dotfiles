@@ -18,12 +18,12 @@ install_brew() {
 install_basic() {
     brew tap homebrew/cask-fonts
     brew install z rg tmux
-    brew upgrade sqlite3
-    brew cask install v2rayx iterm2 squirrel alfred vim
+    brew install sqlite3
+    brew install v2rayx iterm2 squirrel alfred vim
 }
 
 install_extra() {
-    brew cask install shadowsocksx-ng macpass google-chrome scrcpy visual-studio-code spectacle font-firacode-nerd-font-mono
+    brew install macpass google-chrome scrcpy visual-studio-code spectacle font-fira-code-nerd-font
 }
 
 if [ "$(uname)" != "Darwin" ];then
