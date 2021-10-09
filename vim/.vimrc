@@ -287,31 +287,13 @@
         let g:syntastic_check_on_wq = 0
     " }
 
-    " deoplete {
-        " Enable deoplete when InsertEnter.
-        let g:deoplete#enable_at_startup = 0
-        autocmd InsertEnter * call deoplete#enable()
-    " }
-
     " neoformat {
         let g:neoformat_enabled_python = ['autopep8']
     " }
 
-    " neosnippet {
-        " Plugin key-mappings.
-        " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-        " SuperTab like snippets behavior.
-        " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-        "imap <expr><TAB>
-         "\ pumvisible() ? "\<C-n>" :
-         "\ neosnippet#expandable_or_jumpable() ?
-         "\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-        smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    " coc-snippets {
+        " Use <C-l> for trigger snippet expand.
+        imap <C-l> <Plug>(coc-snippets-expand)
     " }
 " }
 
