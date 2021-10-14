@@ -25,6 +25,8 @@ Plug 'vim-syntastic/syntastic'
 Plug 'jiangmiao/auto-pairs'
 Plug 'sbdchd/neoformat'
 Plug 'easymotion/vim-easymotion'
+Plug 'vim-test/vim-test'
+Plug 'jebaum/vim-tmuxify'
 
 " Defx
 if has('nvim')
@@ -186,5 +188,13 @@ color gruvbox
 
             map <C-e> :Defx -toggle<CR>
         endif
+    " }
+
+    " test {
+      " run test cases in current file
+      nmap <silent> t<C-f> :TestFile<CR>
+
+      " make test commands execute using dispatch.vim
+      let test#strategy = "tmuxify"
     " }
 " }
