@@ -362,3 +362,11 @@
         source ~/.vimrc.local
     endif
 " }
+
+" Edit my vimrc quickly {
+    nnoremap <leader>ev :vsp $MYVIMRC<cr>
+    nnoremap <leader>sv :source $MYVIMRC<cr>
+" }
+" Quickly quit insert mode {
+    inoremap jk <esc>
+" }
