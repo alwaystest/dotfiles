@@ -2,6 +2,8 @@
 
 files=(.vimrc.local .vimrc.before.local .vimrc)
 
+dotfiles_root=$(pwd -P)
+
 upload()
 {
     for fileName in ${files[@]} ; do
@@ -12,7 +14,8 @@ upload()
 download()
 {
     for fileName in ${files[@]} ; do
-        cp ./$fileName ~/
+        ln -sf $dotfiles_root/$fileName $HOME/$fileName
+        echo "link $fileName success"
     done
 }
 
