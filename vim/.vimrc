@@ -1,5 +1,4 @@
 " Environment {
-
     " Identify platform {
         silent function! OSX()
             return has('macunix')
@@ -20,7 +19,6 @@
 " }
 
 " General {
-
     set background=dark         " Assume a dark background
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
@@ -37,7 +35,6 @@
     endif
     set history=1000                    " Store a ton of history (default is 20)
     set spell                           " Spell checking on
-
     " Setting up the directories {
         set backup                  " Backups are nice ...
         if has('persistent_undo')
@@ -46,11 +43,9 @@
             set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
         endif
     " }
-
 " }
 
 " Vim UI {
-
     set showmode                    " Display the current mode
 
     set cursorline                  " Highlight current line
@@ -100,7 +95,6 @@
 " }
 
 " Formatting {
-
     set nowrap                      " Do not wrap long lines
     set autoindent                  " Indent at the same level of the previous line
     set shiftwidth=4                " Use indents of 4 spaces
@@ -115,11 +109,9 @@
     "autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
     autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
-
 " }
 
 " Key (re)Mappings {
-
     let mapleader = ','
     if !exists('g:spf13_no_easyWindows')
         map <C-J> <C-W>j<C-W>_
@@ -221,10 +213,20 @@
     " Easier formatting
     nnoremap <silent> <leader>q gwip
 
+    " Easier switch wrap mode
+    nnoremap <leader>w :set wrap!<cr>
+
+
+    " Edit my vimrc quickly {
+        nnoremap <leader>ev :vsp $MYVIMRC<cr>
+        nnoremap <leader>sv :source $MYVIMRC<cr>
+    " }
+    " Quickly quit insert mode {
+        inoremap jk <esc>
+    " }
 " }
 "
 " Plugins {
-
     " JSON {
         nmap <leader>jt <Esc>:%!jq<CR><Esc>:set filetype=json<CR>
         let g:vim_json_syntax_conceal = 0
@@ -326,62 +328,61 @@
 " }
 
 " Functions {
-
     " Initialize directories {
-    function! InitializeDirectories()
-        let parent = $HOME
-        let prefix = 'vim'
-        let dir_list = {
-                    \ 'backup': 'backupdir',
-                    \ 'views': 'viewdir',
-                    \ 'swap': 'directory' }
+        function! InitializeDirectories()
+            let parent = $HOME
+            let prefix = 'vim'
+            let dir_list = {
+                        \ 'backup': 'backupdir',
+                        \ 'views': 'viewdir',
+                        \ 'swap': 'directory' }
 
-        if has('persistent_undo')
-            let dir_list['undo'] = 'undodir'
-        endif
-
-        " To specify a different directory in which to place the vimbackup,
-        " vimviews, vimundo, and vimswap files/directories, add the following to
-        " your .vimrc.before.local file:
-        "   let g:spf13_consolidated_directory = <full path to desired directory>
-        "   eg: let g:spf13_consolidated_directory = $HOME . '/.vim/'
-        if exists('g:spf13_consolidated_directory')
-            let common_dir = g:spf13_consolidated_directory . prefix
-        else
-            let common_dir = parent . '/.' . prefix
-        endif
-
-        for [dirname, settingname] in items(dir_list)
-            let directory = common_dir . dirname . '/'
-            if exists("*mkdir")
-                if !isdirectory(directory)
-                    call mkdir(directory)
-                endif
+            if has('persistent_undo')
+                let dir_list['undo'] = 'undodir'
             endif
-            if !isdirectory(directory)
-                echo "Warning: Unable to create backup directory: " . directory
-                echo "Try: mkdir -p " . directory
+
+            " To specify a different directory in which to place the vimbackup,
+            " vimviews, vimundo, and vimswap files/directories, add the following to
+            " your .vimrc.before.local file:
+            "   let g:spf13_consolidated_directory = <full path to desired directory>
+            "   eg: let g:spf13_consolidated_directory = $HOME . '/.vim/'
+            if exists('g:spf13_consolidated_directory')
+                let common_dir = g:spf13_consolidated_directory . prefix
             else
-                let directory = substitute(directory, " ", "\\\\ ", "g")
-                exec "set " . settingname . "=" . directory
+                let common_dir = parent . '/.' . prefix
             endif
-        endfor
-    endfunction
-    call InitializeDirectories()
-    "
+
+            for [dirname, settingname] in items(dir_list)
+                let directory = common_dir . dirname . '/'
+                if exists("*mkdir")
+                    if !isdirectory(directory)
+                        call mkdir(directory)
+                    endif
+                endif
+                if !isdirectory(directory)
+                    echo "Warning: Unable to create backup directory: " . directory
+                    echo "Try: mkdir -p " . directory
+                else
+                    let directory = substitute(directory, " ", "\\\\ ", "g")
+                    exec "set " . settingname . "=" . directory
+                endif
+            endfor
+        endfunction
+        call InitializeDirectories()
+    " }
 
     " Strip whitespace {
-    function! StripTrailingWhitespace()
-        " Preparation: save last search, and cursor position.
-        let _s=@/
-        let l = line(".")
-        let c = col(".")
-        " do the business:
-        %s/\s\+$//e
-        " clean up: restore previous search history, and cursor position
-        let @/=_s
-        call cursor(l, c)
-    endfunction
+        function! StripTrailingWhitespace()
+            " Preparation: save last search, and cursor position.
+            let _s=@/
+            let l = line(".")
+            let c = col(".")
+            " do the business:
+            %s/\s\+$//e
+            " clean up: restore previous search history, and cursor position
+            let @/=_s
+            call cursor(l, c)
+        endfunction
     " }
 " }
 
@@ -391,10 +392,3 @@
     endif
 " }
 
-" Edit my vimrc quickly {
-    nnoremap <leader>ev :vsp $MYVIMRC<cr>
-    nnoremap <leader>sv :source $MYVIMRC<cr>
-" }
-" Quickly quit insert mode {
-    inoremap jk <esc>
-" }
