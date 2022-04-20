@@ -27,6 +27,7 @@ Plug 'sbdchd/neoformat'
 Plug 'easymotion/vim-easymotion'
 Plug 'vim-test/vim-test'
 Plug 'jebaum/vim-tmuxify'
+Plug 'github/copilot.vim'
 
 " Defx
 if has('nvim')
