@@ -41,6 +41,7 @@ endif
 
 Plug 'honza/vim-snippets'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'masukomi/vim-markdown-folding'
 
 " Initialize plugin system
 call plug#end()

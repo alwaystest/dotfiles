@@ -324,6 +324,13 @@
         " Formatting selected code.
         xmap <leader>f  <Plug>(coc-format-selected)
         nmap <leader>f  <Plug>(coc-format-selected)
+
+        " Use <c-space> to trigger completion.
+        if has('nvim')
+          inoremap <silent><expr> <c-space> coc#refresh()
+        else
+          inoremap <silent><expr> <c-@> coc#refresh()
+        endif
     " }
 " }
 
