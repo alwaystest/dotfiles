@@ -12,6 +12,9 @@
     " }
 " }
 
+let g:airline_theme = 'powerlineish'
+let g:airline_powerline_fonts=1
+
 " Use before config if available {
     if filereadable(expand("~/.vimrc.before"))
         source ~/.vimrc.before
@@ -25,6 +28,10 @@
     set mouse=a                 " Automatically enable mouse usage
     set mousehide               " Hide the mouse cursor while typing
     scriptencoding utf-8
+    set encoding=utf-8
+    set termencoding=utf-8
+    set fileencoding=utf-8
+    set fileencodings=utf-8,ucs-bom,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 
     if has('clipboard')
         if has('unnamedplus')  " When possible use + register for copy-paste
