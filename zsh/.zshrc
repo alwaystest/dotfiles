@@ -54,7 +54,8 @@ ZSH_THEME="robbyrussell"
 
 
 # Note that zsh-syntax-highlighting must be the last plugin sourced.
-plugins=(git sudo adb rsync docker docker-compose osx vi-mode history-substring-search tig)
+plugins=(git sudo adb rsync docker docker-compose macos vi-mode history-substring-search tig z pod)
+# autojump
 
 source $ZSH/oh-my-zsh.sh
 [ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
