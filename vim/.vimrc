@@ -339,6 +339,10 @@ let g:airline_powerline_fonts=1
           inoremap <silent><expr> <c-@> coc#refresh()
         endif
     " }
+    "
+    " vim-test {
+        let test#python#runner = 'pyunit'
+    " }
 " }
 
 " Functions {
