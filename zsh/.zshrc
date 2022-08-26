@@ -215,6 +215,13 @@ wttr()
     curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
 }
 
+# switch java version
+jdk() {
+    version=$1
+    export JAVA_HOME=$(/usr/libexec/java_home -v"$version");
+    java -version
+ }
+
 # Local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 export PATH="/usr/local/opt/binutils/bin:$PATH"
