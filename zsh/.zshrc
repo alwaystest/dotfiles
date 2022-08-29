@@ -222,6 +222,11 @@ jdk() {
     java -version
  }
 
+fjdk() {
+  version=$(/usr/libexec/java_home -V 2>&1 | rg "^\s+\d+" |sed 's/^ *//g'| fzf | awk '{print $1}')
+  jdk $version
+}
+
 # Local config
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 export PATH="/usr/local/opt/binutils/bin:$PATH"
