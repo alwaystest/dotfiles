@@ -337,6 +337,9 @@ let g:airline_powerline_fonts=1
         else
           inoremap <silent><expr> <c-@> coc#refresh()
         endif
+
+        " Install extensions
+        let g:coc_global_extensions = ['coc-json', 'coc-kotlin', 'coc-tsserver', 'coc-snippets', 'coc-git']
     " }
     "
     " vim-test {
