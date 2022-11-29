@@ -147,6 +147,8 @@ color gruvbox
               nnoremap <silent><buffer><expr><nowait> p  defx#do_action('paste')
 
               nnoremap <silent><buffer><expr> S  defx#do_action('toggle_sort', 'time')
+              nnoremap <silent><buffer><expr> >  defx#do_action('resize',  defx#get_context().winwidth + 10)
+              nnoremap <silent><buffer><expr> <  defx#do_action('resize',  defx#get_context().winwidth - 10)
             endfunction
 
             " Ref:
@@ -190,6 +192,7 @@ color gruvbox
             augroup END
 
             map <C-e> :Defx -toggle<CR>
+            nnoremap <silent> <Leader>a  :<C-u>Defx `escape(expand('%:p:h'), ' :')` -search=`expand('%:p')`<CR>
         endif
     " }
 
