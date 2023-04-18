@@ -58,7 +58,8 @@ plugins=(git sudo adb rsync docker docker-compose macos vi-mode history-substrin
 # autojump
 
 source $ZSH/oh-my-zsh.sh
-[ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
+[ -f /opt/homebrew/etc/profile.d/z.sh ] && source /opt/homebrew/etc/profile.d/z.sh
+
 
 # User configuration
 

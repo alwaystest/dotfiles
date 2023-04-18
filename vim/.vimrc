@@ -130,6 +130,8 @@ let g:airline_powerline_fonts=1
     " Wrapped lines goes down/up to next row, rather than next line in file.
     noremap j gj
     noremap k gk
+    noremap gj j
+    noremap gk k
 
     if !exists('g:spf13_no_fastTabs')
         map <S-H> gT
@@ -333,6 +335,13 @@ let g:airline_powerline_fonts=1
     "
     " vim-test {
         let test#python#runner = 'pyunit'
+    " }
+
+    " github_copilot {
+        let g:copilot_proxy = 'localhost:7890'
+        let g:copilot_filetypes = {
+            \ 'gitcommit': v:true,
+            \ }
     " }
 " }
 
