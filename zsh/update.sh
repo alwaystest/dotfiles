@@ -1,15 +1,21 @@
-#!bin/sh
+#!/usr/bin/env bash
 
 fileName=".zshrc"
 
 upload()
 {
-    cp ~/$fileName ./
+    echo "$fileName is symlink, no need to upload"
 }
+
 
 download()
 {
-    cp ./$fileName ~/$fileName
+    if [[ -f ~/$fileName ]]; then
+        echo "$fileName exists, backup it"
+        mv ~/$fileName ~/$fileName.bak
+    fi
+    rm ~/$fileName
+    ln -s `pwd`/zsh/$fileName ~/$fileName
 }
 
 case "$1" in
