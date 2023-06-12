@@ -19,7 +19,7 @@ install_basic() {
     brew tap homebrew/cask-fonts
     brew install z rg tmux fzf
     brew install sqlite3
-    brew install v2rayx iterm2 squirrel alfred vim
+    brew install iterm2 squirrel alfred nvim
 }
 
 install_extra() {
