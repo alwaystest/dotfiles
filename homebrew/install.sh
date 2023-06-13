@@ -17,7 +17,7 @@ install_brew() {
 # Install homebrew packages
 install_basic() {
     brew tap homebrew/cask-fonts
-    brew install z rg tmux fzf
+    brew install z rg tmux fzf tree
     brew install sqlite3
     brew install iterm2 squirrel alfred nvim
 }
