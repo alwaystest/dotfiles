@@ -144,14 +144,13 @@ sort -u | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
 # ctrl-b checks the stash out as a branch, for easier merging
 fstash() {
   local out q k sha
-  while out=$(
-    git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
+  while out=$(git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
     fzf --ansi --no-sort --query="$q" --print-query \
-        --expect=ctrl-d,ctrl-b);
-  do
-    mapfile -t out <<< "$out"
-    q="${out[0]}"
-    k="${out[1]}"
+        --expect=ctrl-d,ctrl-b); do
+    # 使用 Zsh 的方式读取到数组
+    out=("${(@f)out}")
+    q="${out[1]}" # 注意数组索引在 Zsh 中从 1 开始
+    k="${out[2]}"
     sha="${out[-1]}"
     sha="${sha%% *}"
     [[ -z "$sha" ]] && continue
@@ -159,7 +158,7 @@ fstash() {
       git diff $sha
     elif [[ "$k" == 'ctrl-b' ]]; then
       git stash branch "stash-$sha" $sha
-      break;
+      break
     else
       git stash show -p $sha
     fi
@@ -193,8 +192,8 @@ fi
 unalias z 2> /dev/null
 
 z() {
-  [ $# -gt 0 ] && zshz "$*" && return
-  cd "$(zshz -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+  [ $# -gt 0 ] && _z "$*" && return
+  cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
 }
 
 # tm - create new tmux session, or switch to existing one. Works from within tmux too. (@bag-man)
