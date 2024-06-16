@@ -15,7 +15,7 @@ download()
         mv ~/$fileName ~/$fileName.bak
     fi
     rm ~/$fileName
-    ln -s `pwd`/zsh/$fileName ~/$fileName
+    ln -s `pwd`/$fileName ~/$fileName
 }
 
 case "$1" in
