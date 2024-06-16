@@ -132,6 +132,9 @@ let g:airline_powerline_fonts=1
     noremap k gk
     noremap gj j
     noremap gk k
+    " I like using H and L for beginning/end of line
+    noremap H ^
+    noremap L $
 
     if !exists('g:spf13_no_fastTabs')
         map <S-H> gT
