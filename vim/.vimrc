@@ -407,6 +407,14 @@ let g:airline_powerline_fonts=1
     " }
 " }
 
+" AutoCmds {
+    " 进入插入模式时关闭 Markdown 语法高亮
+    autocmd InsertEnter *.md,*.markdown syntax off
+
+    " 离开插入模式时开启 Markdown 语法高亮
+    autocmd InsertLeave *.md,*.markdown syntax on
+" }
+
 " Use local vimrc if available {
     if filereadable(expand("~/.vimrc.local"))
         source ~/.vimrc.local

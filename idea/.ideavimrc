@@ -1,4 +1,3 @@
-
 " Vim UI {
     set incsearch                   " Find as you type search
     set hlsearch                    " Highlight search terms
@@ -8,3 +7,12 @@
     set surround
     set clipboard=unnamed
 " }
+
+inoremap jk <esc>
+
+" I like using H and L for beginning/end of line
+noremap H ^
+noremap L $
+
+set easymotion
+let mapleader= ','
