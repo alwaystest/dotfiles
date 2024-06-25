@@ -136,11 +136,6 @@ let g:airline_powerline_fonts=1
     noremap H ^
     noremap L $
 
-    if !exists('g:spf13_no_fastTabs')
-        map <S-H> gT
-        map <S-L> gt
-    endif
-
     " Stupid shift key fixes
     if !exists('g:spf13_no_keyfixes')
         if has("user_commands")
