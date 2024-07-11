@@ -14,5 +14,5 @@ inoremap jk <esc>
 noremap H ^
 noremap L $
 
-set easymotion
 let mapleader= ','
+set easymotion
