@@ -1,0 +1,43 @@
+{
+  "languageserver": {
+    "protobuf": {
+      "command": "protobuf-language-server",
+      "args": [
+        "--stdio"
+      ],
+      "filetypes": [
+        "proto"
+      ]
+    },
+  },
+  "python.pythonPath": "python3",
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": [
+    "--max-line-length=120"
+  ],
+  "coc.preferences.formatOnSave": true,
+  "[javascript]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[typescript]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[json]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[python]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[sh]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[kotlin]": {
+    "coc.preferences.formatOnSave": false
+  },
+  "[java]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[markdown]": {
+    "coc.preferences.formatOnSave": true
+  },
+}
