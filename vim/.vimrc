@@ -232,7 +232,7 @@ let g:airline_powerline_fonts=1
         inoremap jk <esc>
     " }
 " }
-"
+
 " Plugins {
     " JSON {
         nmap <leader>jt <Esc>:%!jq<CR><Esc>:set filetype=json<CR>
@@ -320,15 +320,20 @@ let g:airline_powerline_fonts=1
         xmap <leader>f  <Plug>(coc-format-selected)
         nmap <leader>f  <Plug>(coc-format-selected)
 
-        " Use <c-space> to trigger completion.
-        if has('nvim')
-          inoremap <silent><expr> <c-space> coc#refresh()
-        else
-          inoremap <silent><expr> <c-@> coc#refresh()
-        endif
+        " Use <Leader>c to trigger completion.
+        inoremap <silent><expr> <Leader>c coc#refresh()
 
         " Install extensions
-        let g:coc_global_extensions = ['coc-json', 'coc-kotlin', 'coc-tsserver', 'coc-snippets', 'coc-git']
+        let g:coc_global_extensions = ['coc-json', 'coc-kotlin', 'coc-tsserver', 'coc-snippets', 'coc-git', 'coc-sh', 'coc-java', 'coc-markdownlint']
+
+        " 跳转到定义
+        nmap <silent> gd <Plug>(coc-definition)
+        " 跳转到类型定义
+        nmap <silent> gy <Plug>(coc-type-definition)
+        " 跳转到实现
+        nmap <silent> gi <Plug>(coc-implementation)
+        " 跳转到引用
+        nmap <silent> gr <Plug>(coc-references)
     " }
     "
     " vim-test {

@@ -30,6 +30,7 @@ Plug 'jebaum/vim-tmuxify'
 Plug 'github/copilot.vim'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'rickhowe/diffchar.vim'
+Plug 'liuchengxu/vista.vim'
 
 " Defx
 if has('nvim')
@@ -193,6 +194,7 @@ color gruvbox
             augroup END
 
             map <C-e> :Defx -toggle<CR>
+            " locate current file in defx
             nnoremap <silent> <Leader>a  :<C-u>Defx `escape(expand('%:p:h'), ' :')` -search=`expand('%:p')`<CR>
         endif
     " }
@@ -204,5 +206,56 @@ color gruvbox
       " make test commands execute using dispatch.vim
       let test#strategy = "tmuxify"
     " }
-" }
+    "
+    " terminal {
+      " 使用 <Leader>ft 打开浮动终端
+      nnoremap <Leader>ft :call OpenFloatingTerm()<CR>
 
+      function! OpenFloatingTerm()
+        let height = float2nr((&lines - 2) * 0.6)
+        let row = float2nr((&lines - height) / 2)
+        let width = float2nr(&columns * 0.6)
+        let col = float2nr((&columns - width) / 2)
+        let opts = {
+              \ 'relative': 'editor',
+              \ 'row': row,
+              \ 'col': col,
+              \ 'width': width,
+              \ 'height': height,
+              \ 'style': 'minimal'
+              \ }
+        let buf = nvim_create_buf(v:false, v:true)
+        let win = nvim_open_win(buf, v:true, opts)
+        terminal
+        startinsert
+      endfunction
+
+      " 使用 <Leader>t 在下方打开一个水平分割的终端
+      nnoremap <Leader>t :split term://zsh<CR>
+
+      " 使用 <Leader>vt 在右侧打开一个垂直分割的终端
+      nnoremap <Leader>vt :vsplit term://zsh<CR>
+
+      " 使用 <Leader>q 快速关闭终端
+      tnoremap <Leader>q <C-\><C-n>:q!<CR>
+
+      " 使用 Esc 键从终端模式退出到普通模式
+      tnoremap <Esc> <C-\><C-n>
+    " }
+    "
+    " Vista {
+      nnoremap <silent> <Leader>v :Vista!!<CR>
+      " 设置 Vista 的宽度
+      let g:vista_sidebar_width = 50
+
+      " 设置默认的执行器（可以是 ctags 或 vim_lsp）
+      let g:vista_default_executive = 'coc'
+
+      " 设置图标
+      let g:vista#renderer#enable_icon = 1
+    " }
+    "
+    " foldsearch {
+      let g:foldsearch_disable_mappings = 1
+    " }
+" }
