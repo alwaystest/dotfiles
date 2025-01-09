@@ -40,4 +40,5 @@
   "[markdown]": {
     "coc.preferences.formatOnSave": true
   },
+  "snippets.ultisnips.enable": false,
 }
