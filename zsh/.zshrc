@@ -1,3 +1,4 @@
+# zmodload zsh/zprof
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -8,6 +9,13 @@ export ZSH=$HOME/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
+
+# 禁用所有自动检查和更新
+DISABLE_AUTO_UPDATE="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UPDATE_PROMPT="true"
+
+export HOMEBREW_AUTO_UPDATE_SECS=86400
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -54,7 +62,8 @@ ZSH_THEME="robbyrussell"
 
 
 # Note that zsh-syntax-highlighting must be the last plugin sourced.
-plugins=(git sudo rsync docker docker-compose macos vi-mode history-substring-search tig z pod gradle)
+# plugins=(git sudo rsync docker docker-compose macos vi-mode history-substring-search tig z pod gradle)
+plugins=(evalcache git sudo docker-compose macos tig z)
 # autojump
 
 source $ZSH/oh-my-zsh.sh
@@ -91,9 +100,12 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias p="ping"
 
-if command -v pyenv >/dev/null; then
-  eval "$(pyenv init -)"
-fi
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+
+compinit -C
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -227,11 +239,11 @@ fjdk() {
   jdk $version
 }
 
-# Local config
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 export PATH="/usr/local/opt/binutils/bin:$PATH"
 export PATH="$HOME/.fastlane/bin:$PATH"
 if which ruby >/dev/null && which gem >/dev/null; then
     PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
-export HOMEBREW_AUTO_UPDATE_SECS=86400
+
+# Local config
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
