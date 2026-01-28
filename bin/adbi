@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# 解析命令行参数
+DEBUG=false
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -d|--debug)
+            DEBUG=true
+            shift
+            ;;
+        -h|--help)
+            echo "用法: adbi [选项]"
+            echo ""
+            echo "选项:"
+            echo "  -d, --debug    启用调试模式，显示详细执行信息"
+            echo "  -h, --help     显示帮助信息"
+            exit 0
+            ;;
+        *)
+            echo "未知参数: $1" >&2
+            echo "使用 -h 或 --help 查看帮助" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# 调试函数
+debug() {
+    if [ "$DEBUG" = true ]; then
+        echo "[DEBUG] $*" >&2
+    fi
+}
+
+# 启用 bash 调试模式
+if [ "$DEBUG" = true ]; then
+    set -x
+fi
+
+debug "开始执行脚本"
+debug "当前工作目录: $PWD"
+
+# 检查依赖
+debug "检查依赖工具..."
+for cmd in fzf rg adb; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "错误: 未找到 $cmd" >&2
+        exit 1
+    fi
+    debug "✓ 找到 $cmd: $(which $cmd)"
+done
+
+# 自动检测 Android 项目根目录
+debug "检测项目根目录..."
+find_project_root() {
+    local dir="$PWD"
+    debug "  从目录开始查找: $dir"
+    while [ "$dir" != "/" ]; do
+        if [ -f "$dir/build.gradle" ] || [ -f "$dir/settings.gradle" ] || [ -f "$dir/settings.gradle.kts" ]; then
+            debug "  ✓ 找到项目根目录: $dir"
+            echo "$dir"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+    debug "  ⚠ 未找到项目根目录，使用当前目录: $PWD"
+    echo "$PWD"
+}
+
+PROJECT_ROOT=$(find_project_root)
+debug "项目根目录: $PROJECT_ROOT"
+
+# 切换到项目根目录进行搜索
+cd "$PROJECT_ROOT"
+debug "已切换到项目根目录"
+
+# 使用 ripgrep 查找 APK 文件（更快）
+# 使用 --no-ignore 忽略 .gitignore 规则（因为 build/ 目录被忽略）
+# 使用 --glob 直接匹配路径和文件名，自动排除 intermediates（因为 intermediates 不在 build/outputs/apk 路径下）
+debug "开始搜索 APK 文件..."
+start_time=$(date +%s)
+apk_list=$(rg --files --no-ignore --glob '**/build/outputs/apk/**/*.apk' 2>/dev/null | sort)
+end_time=$(date +%s)
+search_duration=$((end_time - start_time))
+
+apk_count=$(echo "$apk_list" | grep -c . || echo "0")
+debug "搜索完成，耗时: ${search_duration}秒，找到 ${apk_count} 个 APK 文件"
+
+if [ -z "$apk_list" ]; then
+    echo "未找到任何 APK 文件" >&2
+    echo "当前搜索目录: $PROJECT_ROOT" >&2
+    echo "提示: 请先运行 assemble 任务构建 APK" >&2
+    exit 1
+fi
+
+# 显示找到的 APK 列表（调试模式）
+if [ "$DEBUG" = true ]; then
+    echo ""
+    echo "找到的 APK 文件列表:" >&2
+    echo "$apk_list" | nl -w2 -s'. ' >&2
+    echo ""
+fi
+
+# 检查设备连接（仅警告，不阻止选择）
+debug "检查设备连接..."
+if ! adb devices 2>/dev/null | grep -q "device$"; then
+    echo "⚠️  警告: 未检测到已连接的 Android 设备" >&2
+    echo "   你可以先选择 APK，连接设备后再安装" >&2
+    echo ""
+    debug "设备检查: 未连接"
+else
+    debug "设备检查: 已连接"
+fi
+
+# 使用 fzf 选择 APK
+debug "启动 fzf 选择器..."
+if [ "$DEBUG" = true ]; then
+    debug "fzf 命令: echo apk_list | fzf ..."
+fi
+
+selected_apk=$(echo "$apk_list" | fzf \
+    --height 40% \
+    --border \
+    --header="选择要安装的 APK (方向键选择，回车确认，ESC 取消，Ctrl+R 刷新)" \
+    --preview='echo "文件信息:"; ls -lh {} 2>/dev/null | awk "{print \"大小: \" \$5 \"\n修改时间: \" \$6 \" \" \$7 \" \" \$8 \"\n完整路径: \" \$9}" || echo "无法读取文件信息"' \
+    --preview-window=right:50% \
+    --prompt="APK> " \
+    --bind="ctrl-r:reload(rg --files --no-ignore --glob '**/build/outputs/apk/**/*.apk' 2>/dev/null | sort)")
+
+debug "fzf 选择完成，结果: ${selected_apk:-<空>}"
+
+if [ -z "$selected_apk" ]; then
+    debug "用户取消了选择"
+    echo "已取消"
+    exit 0
+fi
+
+# 确保路径是绝对路径
+if [[ "$selected_apk" != /* ]]; then
+    selected_apk="$PROJECT_ROOT/$selected_apk"
+fi
+debug "完整路径: $selected_apk"
+
+# 显示文件信息
+echo ""
+echo "========================================"
+echo "准备安装 APK:"
+echo "路径: $selected_apk"
+if [ -f "$selected_apk" ]; then
+    file_info=$(ls -lh "$selected_apk")
+    echo "大小: $(echo "$file_info" | awk '{print $5}')"
+    echo "修改时间: $(echo "$file_info" | awk '{print $6, $7, $8}')"
+    debug "文件存在，大小: $(echo "$file_info" | awk '{print $5}')"
+else
+    debug "错误: 文件不存在"
+    echo "错误: 文件不存在" >&2
+    exit 1
+fi
+echo "========================================"
+echo ""
+
+# 再次检查设备连接
+debug "再次检查设备连接..."
+if ! adb devices 2>/dev/null | grep -q "device$"; then
+    echo "❌ 错误: 未检测到已连接的 Android 设备" >&2
+    echo "   请连接设备并启用 USB 调试后重试" >&2
+    exit 1
+fi
+
+# 安装 APK
+debug "开始安装 APK..."
+debug "执行命令: adb install -r \"$selected_apk\""
+if adb install -r "$selected_apk"; then
+    echo ""
+    echo "✅ 安装成功!"
+    debug "安装成功"
+else
+    echo ""
+    echo "❌ 安装失败!"
+    debug "安装失败"
+    exit 1
+fi
