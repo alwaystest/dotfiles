@@ -78,6 +78,7 @@ debug "已切换到项目根目录"
 # 使用 ripgrep 查找 APK 文件（更快）
 # 使用 --no-ignore 忽略 .gitignore 规则（因为 build/ 目录被忽略）
 # 使用 --glob 直接匹配路径和文件名，自动排除 intermediates（因为 intermediates 不在 build/outputs/apk 路径下）
+echo "🔍 正在搜索 APK 文件..."
 debug "开始搜索 APK 文件..."
 start_time=$(date +%s)
 apk_list=$(rg --files --no-ignore --glob '**/build/outputs/apk/**/*.apk' 2>/dev/null | sort)
@@ -85,6 +86,7 @@ end_time=$(date +%s)
 search_duration=$((end_time - start_time))
 
 apk_count=$(echo "$apk_list" | grep -c . || echo "0")
+echo "✓ 搜索完成，耗时: ${search_duration}秒，找到 ${apk_count} 个 APK 文件"
 debug "搜索完成，耗时: ${search_duration}秒，找到 ${apk_count} 个 APK 文件"
 
 if [ -z "$apk_list" ]; then
@@ -100,17 +102,6 @@ if [ "$DEBUG" = true ]; then
     echo "找到的 APK 文件列表:" >&2
     echo "$apk_list" | nl -w2 -s'. ' >&2
     echo ""
-fi
-
-# 检查设备连接（仅警告，不阻止选择）
-debug "检查设备连接..."
-if ! adb devices 2>/dev/null | grep -q "device$"; then
-    echo "⚠️  警告: 未检测到已连接的 Android 设备" >&2
-    echo "   你可以先选择 APK，连接设备后再安装" >&2
-    echo ""
-    debug "设备检查: 未连接"
-else
-    debug "设备检查: 已连接"
 fi
 
 # 使用 fzf 选择 APK
@@ -160,13 +151,23 @@ fi
 echo "========================================"
 echo ""
 
-# 再次检查设备连接
-debug "再次检查设备连接..."
+# 检查设备连接（带耗时统计）
+echo "🔍 正在检查设备连接..."
+debug "开始检查设备连接..."
+device_check_start=$(date +%s)
 if ! adb devices 2>/dev/null | grep -q "device$"; then
+    device_check_end=$(date +%s)
+    device_check_duration=$((device_check_end - device_check_start))
+    echo "✗ 检查完成，耗时: ${device_check_duration}秒"
     echo "❌ 错误: 未检测到已连接的 Android 设备" >&2
     echo "   请连接设备并启用 USB 调试后重试" >&2
+    debug "设备检查: 未连接，耗时: ${device_check_duration}秒"
     exit 1
 fi
+device_check_end=$(date +%s)
+device_check_duration=$((device_check_end - device_check_start))
+echo "✓ 检查完成，耗时: ${device_check_duration}秒，设备已连接"
+debug "设备检查: 已连接，耗时: ${device_check_duration}秒"
 
 # 安装 APK
 debug "开始安装 APK..."
