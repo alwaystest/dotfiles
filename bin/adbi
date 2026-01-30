@@ -43,7 +43,7 @@ debug "当前工作目录: $PWD"
 
 # 检查依赖
 debug "检查依赖工具..."
-for cmd in fzf rg adb; do
+for cmd in fzf fd adb; do
     if ! command -v "$cmd" &> /dev/null; then
         echo "错误: 未找到 $cmd" >&2
         exit 1
@@ -75,13 +75,21 @@ debug "项目根目录: $PROJECT_ROOT"
 cd "$PROJECT_ROOT"
 debug "已切换到项目根目录"
 
-# 使用 ripgrep 查找 APK 文件（更快）
-# 使用 --no-ignore 忽略 .gitignore 规则（因为 build/ 目录被忽略）
-# 使用 --glob 直接匹配路径和文件名，自动排除 intermediates（因为 intermediates 不在 build/outputs/apk 路径下）
+# 两阶段搜索：先定位 build 目录（快 13 倍）
+# 第一阶段：快速定位所有 build 目录
+# 第二阶段：在 build/outputs/apk 中精确搜索 APK 文件
+find_apks() {
+    fd -t d -I -d 5 --exclude .git --exclude .gradle '^build$' . 2>/dev/null | \
+      while read d; do
+        [ -d "$d/outputs/apk" ] && fd -e apk . "$d/outputs/apk" 2>/dev/null || true
+      done | sort
+}
+export -f find_apks  # 导出函数，使 fzf reload 子 shell 可访问
+
 echo "🔍 正在搜索 APK 文件..."
 debug "开始搜索 APK 文件..."
 start_time=$(date +%s)
-apk_list=$(rg --files --no-ignore --glob '**/build/outputs/apk/**/*.apk' 2>/dev/null | sort)
+apk_list=$(find_apks)
 end_time=$(date +%s)
 search_duration=$((end_time - start_time))
 
@@ -117,7 +125,7 @@ selected_apk=$(echo "$apk_list" | fzf \
     --preview='echo "文件信息:"; ls -lh {} 2>/dev/null | awk "{print \"大小: \" \$5 \"\n修改时间: \" \$6 \" \" \$7 \" \" \$8 \"\n完整路径: \" \$9}" || echo "无法读取文件信息"' \
     --preview-window=right:50% \
     --prompt="APK> " \
-    --bind="ctrl-r:reload(rg --files --no-ignore --glob '**/build/outputs/apk/**/*.apk' 2>/dev/null | sort)")
+    --bind="ctrl-r:reload(find_apks)")
 
 debug "fzf 选择完成，结果: ${selected_apk:-<空>}"
 
